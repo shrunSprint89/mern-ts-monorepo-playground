@@ -1,21 +1,25 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React from 'react';
 import Dashboard from '../dashboard/Dashboard';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { Navbar } from '../navbar/navbar';
+import { ServerHealthProvider } from '../../context/health-provider';
 
 function App() {
-  const [status, setStatus] = useState('');
+	return (
+		<ServerHealthProvider>
+			<BrowserRouter>
+				<Navbar />
 
-  useEffect(() => {
-    axios.get('/api/health').then(res => setStatus(res.data.status === 'ok' ? 'Running': 'Not running'));
-  }, []);
-
-  return (
-    <div>
-      <h1>MERN TS Monorepo</h1>
-      <p>Server: {status}</p>
-      <Dashboard />
-    </div>
-  );
+				<div className="p-3">
+					<Routes>
+						<Route path="/" element={<Dashboard />} />
+						<Route path="/products" element={<Dashboard />} />
+						<Route path="/products/:id" element={<Dashboard />} />
+					</Routes>
+				</div>
+			</BrowserRouter>
+		</ServerHealthProvider>
+	);
 }
 
 export default App;
